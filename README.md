@@ -112,15 +112,6 @@ The project config is in `.continue/config.yaml`. Continue also supports a user-
 6. Ask `What is 125 times 24?` and explain that arithmetic is evaluated by the local calculator.
 7. If required, disconnect the internet and repeat a question after confirming the stack and both models were prepared beforehand.
 
-## Troubleshooting
-
-- **The website does not open:** run `docker compose ps`, then inspect `docker compose logs -f app`.
-- **Ollama is not ready:** check `docker compose logs -f ollama` and give it a moment to start.
-- **A model is missing:** while online, run `docker compose exec ollama ollama pull qwen2.5:3b` or `docker compose exec ollama ollama pull llama3.2:3b`.
-- **The chat reports that Ollama is unavailable:** confirm the Ollama service is running and the selected model appears in `ollama list`.
-- **Responses are slow:** 3B models still need system memory. Close other applications and wait for the first model load to finish.
-- **Continue cannot connect:** check that the Compose stack is running, open `http://localhost:11435/api/tags`, and confirm that the model tags in `.continue/config.yaml` match the downloaded models.
-
 ## GitHub
 
 This project is published at [github.com/7iqul/devops-local-ai-chat](https://github.com/7iqul/devops-local-ai-chat). To get a copy on another computer, clone it with:
