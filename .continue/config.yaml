@@ -16,10 +16,3 @@ models:
     roles: [chat, edit, apply]
     defaultCompletionOptions:
       contextLength: 4096
-  - name: Hermes 3 3B (Optional Local)
-    provider: ollama
-    model: hermes3:3b
-    apiBase: http://localhost:11435
-    roles: [chat, edit, apply]
-    defaultCompletionOptions:
-      contextLength: 4096
