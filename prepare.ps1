@@ -53,4 +53,5 @@ foreach ($model in $models) {
 
 Write-Host ''
 Write-Host 'Setup is complete. Open http://localhost:8000 and use the chat button in the lower-right corner.' -ForegroundColor Green
-Write-Host 'Try both local models, then disconnect the internet and repeat the demo.' -ForegroundColor Green
+Write-Host 'Try both installed local models, then disconnect the internet and repeat the demo.' -ForegroundColor Green
+Write-Host 'Optional: download Hermes 3B only when wanted with: docker compose exec ollama ollama pull hermes3:3b' -ForegroundColor Cyan

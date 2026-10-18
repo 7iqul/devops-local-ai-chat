@@ -7,7 +7,8 @@ DevOps Field Guide is a small, English-language learning website about DevOps. A
 - Explain DevOps concepts in a clear, student-friendly way.
 - Keep the assistant available as a chat widget on every section of the site.
 - Run the web app and Ollama with Docker Compose.
-- Support two selectable local models: Qwen 2.5 3B and Llama 3.2 3B.
+- Install two selectable local models by default: Qwen 2.5 3B and Llama 3.2 3B.
+- Offer Hermes 3 3B as an optional third model without downloading it during setup.
 - Prepare the site and models before a presentation so the demo can run without internet.
 - Configure the same local models in VS Code through Continue.
 
@@ -32,7 +33,8 @@ Browser
   └── VS Code + Continue (optional)
           └── Ollama API published on host :11435
                  ├── qwen2.5:3b
-                 └── llama3.2:3b
+                 ├── llama3.2:3b
+                 └── hermes3:3b (optional; pull on demand)
 
 Docker Compose runs the web app and Ollama and stores model files in a named volume. Inside Docker's Compose network, the app reaches Ollama at `http://ollama:11434`. The container publishes its API on host port `11435` so it can coexist with a native Ollama installation that uses port `11434`.
 ```
@@ -51,7 +53,7 @@ Docker Compose runs the web app and Ollama and stores model files in a named vol
 
 - Windows 10/11 with Docker Desktop, or Linux/macOS with Docker Engine and the Docker Compose plugin.
 - 8 GB RAM minimum in practice; 16 GB is recommended for smoother model inference.
-- About 6 GB or more of free disk space for the application image and both model files.
+- About 6 GB or more of free disk space for the application image and the two default models. Hermes 3B is an optional additional download of about 2 GB.
 - Internet access for the first Docker image and model downloads only.
 - VS Code and the Continue extension are optional.
 
@@ -64,9 +66,17 @@ Set-ExecutionPolicy -Scope Process Bypass
 .\prepare.ps1
 ```
 
-The script builds the website image, starts both services, and pulls any missing Ollama models into the persistent `ollama_data` volume. The first setup requires internet and downloads several gigabytes. Leave the process running until the script reports success.
+The script builds the website image, starts both services, and pulls only the two default Ollama models into the persistent `ollama_data` volume. The first setup requires internet and downloads several gigabytes. Hermes is listed as an optional chat and Continue model, but it is deliberately not downloaded during setup.
 
 Open [http://localhost:8000](http://localhost:8000). Use the floating chat button in the lower-right corner. Try the quick prompts, ask a DevOps question, switch between Qwen and Llama, or ask `What is 125 times 24?` to see the deterministic local calculator.
+
+To add Hermes 3B to the Ollama Docker container later, while online, run:
+
+```powershell
+docker compose exec ollama ollama pull hermes3:3b
+```
+
+The chat and Continue model selectors will enable Hermes after Ollama reports it as available. The model is about 2 GB; Ollama's official library lists it as `hermes3:3b`.
 
 Useful commands:
 
@@ -82,7 +92,7 @@ docker compose down
 
 ## Prepare and demonstrate offline
 
-Complete the first-time setup while online. Confirm `docker compose exec ollama ollama list` shows both models, and ask the chat widget one question with each model. Then turn off Wi-Fi and repeat the questions. The website, Python API, model inference, and calculator use local services; the GitHub repository does not contain model weights.
+Complete the first-time setup while online. Confirm `docker compose exec ollama ollama list` shows Qwen and Llama, and ask the chat widget one question with each model. If you also want Hermes in an offline demo, pull it using the command above before disconnecting. Then turn off Wi-Fi and repeat the questions. The website, Python API, model inference, and calculator use local services; the GitHub repository does not contain model weights.
 
 Keep Docker Desktop running during the presentation. Start the already-prepared project with:
 
@@ -97,7 +107,7 @@ Open `http://localhost:8000`. Both the Docker image and models must have been pr
 1. Install the **Continue** extension from the VS Code Marketplace while online.
 2. Open this project folder in VS Code.
 3. Start the Compose stack and wait for setup to finish.
-4. Open Continue and select `Qwen 2.5 3B (Local)` or `Llama 3.2 3B (Local)`.
+4. Open Continue and select `Qwen 2.5 3B (Local)` or `Llama 3.2 3B (Local)`. Hermes appears after you pull `hermes3:3b` into Ollama.
 5. Keep the Compose Ollama service running. Continue connects to `http://localhost:11435`.
 
 The project config is in `.continue/config.yaml`. Continue also supports a user-level config at `%USERPROFILE%\.continue\config.yaml`; copy the project config there if the installed Continue version does not pick up the workspace config. Inference uses the local Ollama container. Marketplace installation itself requires internet.
@@ -111,6 +121,16 @@ The project config is in `.continue/config.yaml`. Continue also supports a user-
 5. Switch models and ask the same question to compare local responses.
 6. Ask `What is 125 times 24?` and explain that arithmetic is evaluated by the local calculator.
 7. If required, disconnect the internet and repeat a question after confirming the stack and both models were prepared beforehand.
+
+## Troubleshooting
+
+- **The website does not open:** run `docker compose ps`, then inspect `docker compose logs -f app`.
+- **Ollama is not ready:** check `docker compose logs -f ollama` and give it a moment to start.
+- **A model is missing:** while online, run `docker compose exec ollama ollama pull qwen2.5:3b` or `docker compose exec ollama ollama pull llama3.2:3b`.
+- **You want the optional Hermes model:** run `docker compose exec ollama ollama pull hermes3:3b` while online; this does not run automatically during setup.
+- **The chat reports that Ollama is unavailable:** confirm the Ollama service is running and the selected model appears in `ollama list`.
+- **Responses are slow:** 3B models still need system memory. Close other applications and wait for the first model load to finish.
+- **Continue cannot connect:** check that the Compose stack is running, open `http://localhost:11435/api/tags`, and confirm that the model tags in `.continue/config.yaml` match the downloaded models.
 
 ## GitHub
 

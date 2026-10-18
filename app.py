@@ -8,7 +8,7 @@ from urllib.request import Request, urlopen
 import json
 
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434")
-MODELS = ["qwen2.5:3b", "llama3.2:3b"]
+MODELS = ["qwen2.5:3b", "llama3.2:3b", "hermes3:3b"]
 SYSTEM_PROMPT = """You are the DevOps Guide Assistant for the English-language FIELDGUIDE.DEV website. You are not a general personal assistant. Help visitors understand the ideas presented on this site, explain terminology in plain English, compare concepts, and give short practical examples.
 
 Website reference:
