@@ -123,17 +123,14 @@ The project config is in `.continue/config.yaml`. Continue also supports a user-
 
 ## GitHub
 
-Create a repository, then set its URL and push the project from this folder:
+This project is published at [github.com/7iqul/devops-local-ai-chat](https://github.com/7iqul/devops-local-ai-chat). To get a copy on another computer, clone it with:
 
 ```powershell
-git add .
-git commit -m "Build offline DevOps learning site with local AI chat"
-git branch -M main
-git remote add origin https://github.com/USERNAME/devops-local-ai-chat.git
-git push -u origin main
+git clone https://github.com/7iqul/devops-local-ai-chat.git
+cd devops-local-ai-chat
 ```
 
-Replace `USERNAME` with the account that owns the repository. Never commit model weights, API keys, or local environment files. The `.gitignore` excludes common local-only files.
+The repository contains the application source and setup instructions, not the model weights. Never commit model weights, API keys, or local environment files. The `.gitignore` excludes common local-only files.
 
 ## License
 
