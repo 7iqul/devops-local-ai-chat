@@ -1,0 +1,18 @@
+name: Rafiq Local
+version: 1.0.0
+schema: v1
+models:
+  - name: Qwen 2.5 3B (Local)
+    provider: ollama
+    model: qwen2.5:3b
+    apiBase: http://localhost:11435
+    roles: [chat, edit, apply]
+    defaultCompletionOptions:
+      contextLength: 4096
+  - name: Llama 3.2 3B (Local)
+    provider: ollama
+    model: llama3.2:3b
+    apiBase: http://localhost:11435
+    roles: [chat, edit, apply]
+    defaultCompletionOptions:
+      contextLength: 4096
