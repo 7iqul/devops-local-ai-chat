@@ -2,6 +2,8 @@ services:
   ollama:
     image: ollama/ollama:latest
     container_name: devops-guide-ollama
+    environment:
+      OLLAMA_CONTEXT_LENGTH: "65536"
     volumes:
       - ollama_data:/root/.ollama
     ports:
@@ -31,5 +33,20 @@ services:
       timeout: 5s
       retries: 5
       start_period: 5s
+  hermes-agent:
+    image: nousresearch/hermes-agent:latest
+    profiles: ["hermes"]
+    depends_on:
+      ollama:
+        condition: service_healthy
+    volumes:
+      - hermes_data:/opt/data
+    environment:
+      HERMES_UID: "10000"
+      HERMES_GID: "10000"
+    stdin_open: true
+    tty: true
+    command: ["--tui"]
 volumes:
   ollama_data:
+  hermes_data:
