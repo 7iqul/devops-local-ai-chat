@@ -141,16 +141,6 @@ The workspace configuration is `.continue/config.yaml`. If your Continue version
 7. If you have prepared Hermes, open a second PowerShell window and start its TUI. Explain that Hermes Agent is a separate local agent container configured to use the Ollama service.
 8. Turn off Wi-Fi and repeat the prepared demos to show offline operation.
 
-## Troubleshooting
-
-- **Website does not open:** run `docker compose ps`, then inspect `docker compose logs -f app`.
-- **Ollama is not ready:** inspect `docker compose logs -f ollama` and wait for its health check.
-- **A website model is missing:** while online, run `docker compose exec ollama ollama pull qwen2.5:3b` or `docker compose exec ollama ollama pull llama3.2:3b`.
-- **Hermes image is missing:** run the Hermes setup command above while online; Docker downloads its image on first use.
-- **Hermes cannot connect to Ollama:** use `http://ollama:11434/v1` from inside the Hermes container, not `localhost`; verify `docker compose ps` shows Ollama healthy.
-- **Hermes rejects the context size:** confirm `OLLAMA_CONTEXT_LENGTH=65536` in the Ollama container and recreate it with `docker compose up -d --force-recreate ollama`; then check the running model's context using `docker compose exec ollama ollama ps`.
-- **Hermes or Ollama runs out of memory:** the 64K context uses more RAM. Close other applications or skip the Hermes live demo on a memory-limited laptop.
-- **Continue cannot connect:** check the Compose stack, open `http://localhost:11435/api/tags`, and ensure model names in `.continue/config.yaml` match `ollama list`.
 
 ## GitHub
 
